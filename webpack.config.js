@@ -1,5 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
+var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/index.ts',
@@ -38,6 +40,10 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        "test": /\.html$/,
+        "loader": "raw-loader"
       }
     ]
   },
@@ -54,7 +60,12 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  plugins: [
+    new CopyWebpackPlugin([
+      { from: 'index.html', to: 'index.html' }
+    ])
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -75,5 +86,20 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
-  ])
+  ]);
+} else {
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"development"'
+      }
+    }),
+    new BrowserSyncPlugin({
+      // browse to http://localhost:3000/ during development, 
+      // ./public directory is being served 
+      host: 'localhost',
+      port: 4200,
+      server: { baseDir: ['dist'] }
+    })
+  ]);
 }
