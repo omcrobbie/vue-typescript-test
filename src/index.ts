@@ -2,7 +2,7 @@
 
 import Vue from "vue";
 import HelloDecorator from './components/Hello.vue';
-import store from './store';
+import {store} from './store';
 import app from './app.vue';
 
 

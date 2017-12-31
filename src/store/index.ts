@@ -1,13 +1,17 @@
 import  Vue from 'vue';
-import Vuex from 'vuex';
-import hello from './modules/hello';
-import user from './modules/user';
+import Vuex, {Getter} from 'vuex';
+import * as hello from './modules/hello';
+import * as user from './modules/user';
 
 Vue.use(Vuex);
+export interface RootState{
+    hello: hello.State;
+    user: user.State;
+}
 
-export default new Vuex.Store({
+export const store = new Vuex.Store<RootState>({
     modules: {
-        hello,
-        user
+        hello: hello.module,
+        user: user.module
     }
 });

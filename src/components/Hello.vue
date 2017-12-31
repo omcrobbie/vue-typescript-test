@@ -3,7 +3,7 @@
 <!-- This is an alternative way to define the Hello component using decorators -->
 <template>
     <div>
-        <div class="greeting">Hello {{name}}{{getEnthusiasm}}</div>
+        <div class="greeting">Hello {{name}}{{enthusiasm}}</div>
         <button @click="decrement">-</button>
         <button @click="increment">+</button>
     </div>
@@ -12,31 +12,19 @@
 <script lang="ts">
 
 import Vue from 'vue';
-import { mapGetters, mapActions, mapMutations, mapState } from 'vuex';
-import * as types from '../store/mutation-types';
+import { mapGetters, mapActions } from 'vuex';
+import * as types from '../store/modules/hello/types';
 
 export default Vue.extend({
     props:['name'],
-    // @Prop() name: string;
-    // @Prop() initialEnthusiasm: number;
-    // enthusiasm = this.initialEnthusiasm;
-    // increment() {
-    //     this.enthusiasm++;
-    // }
-    // decrement() {
-    //     if (this.enthusiasm > 1) {
-    //         this.enthusiasm--;
-    //     }
-    // }
-    // get exclamationMarks(): string {
-    //     return Array(this.enthusiasm + 1).join('!');
-    // }
     computed: {
-        ...mapGetters('hello', ['getEnthusiasm'])
+        ...mapGetters({
+            enthusiasm: types.GET_ENTHUSIASM
+        })
     },
     methods: {
-        ...mapActions('hello',{
-            increment: types.INC_ENTHUSIASM,
+        ...mapActions({
+            increment: types.INC_ENTHUSIASM, 
             decrement: types.DEC_ENTHUSIASM
         })
     }
